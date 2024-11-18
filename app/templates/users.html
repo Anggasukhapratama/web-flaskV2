@@ -1,0 +1,40 @@
+<!-- templates/users.html -->
+{% extends "base.html" %}
+
+{% block title %}Daftar Users{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>Daftar Users</h1>
+    <!-- Tautan untuk menambah user -->
+    <a href="{{ url_for('auth.add_user') }}" class="btn-add">Tambah User</a>
+</div>
+
+<!-- Tabel Daftar Users -->
+<div class="content">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>
+                    <!-- Tombol Edit dan Delete -->
+                    <a href="{{ url_for('auth.edit_user', user_id=user[0]) }}" class="btn-edit">Edit</a>
+                    <form action="{{ url_for('auth.delete_user', user_id=user[0]) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

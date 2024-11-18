@@ -1,0 +1,48 @@
+<!-- templates/artikel.html -->
+{% extends "base.html" %}
+
+{% block title %}Daftar Artikel{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>Daftar Artikel</h1>
+    <a href="{{ url_for('auth.add_artikel') }}" class="btn-add">Tambah Artikel</a>
+</div>
+
+<div class="content">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Judul</th>
+                <th>Gambar</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for artikel in articles %}
+            <tr>
+                <td>{{ artikel[0] }}</td>
+                <td>{{ artikel[1] }}</td>
+                <td>
+                    {% if artikel[3] %}
+                        <!-- Debugging: Print out the filename to ensure it is correct -->
+                        <p>Nama File: {{ artikel[3] }}</p>
+                        <!-- Use url_for to load the image from 'uploads' directory inside 'static' -->
+                        <img src="{{ url_for('static', filename='uploads/' + artikel[3]) }}" alt="Gambar Artikel" width="100">
+                    {% else %}
+                        Tidak ada gambar
+                    {% endif %}
+                </td>                
+                <td>
+                    <a href="{{ url_for('auth.edit_artikel', artikel_id=artikel[0]) }}" class="btn-edit">Edit</a>
+                    <form action="{{ url_for('auth.delete_artikel', artikel_id=artikel[0]) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn-delete" onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Artikel{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h2>Edit Artikel</h2>
+    <form action="{{ url_for('auth.edit_artikel', artikel_id=artikel[0]) }}" method="POST" enctype="multipart/form-data">
+        <label for="title">Judul:</label>
+        <input type="text" id="title" name="title" value="{{ artikel[1] }}" required>
+        <br><br>
+
+        <label for="content">Konten:</label>
+        <textarea id="content" name="content" required>{{ artikel[2] }}</textarea>
+        <br><br>
+
+        <label for="image">Upload Gambar:</label>
+        {% if artikel[3] %}
+            <p>Gambar Saat Ini:</p>
+            <img src="{{ url_for('static', filename='uploads/' + artikel[3]) }}" alt="Gambar Artikel" width="100">
+            <br><br>
+        {% endif %}
+        <input type="file" id="image" name="image" accept="image/*">
+        <br><br>
+
+        <button type="submit">Simpan</button>
+    </form>
+
+    <!-- CKEditor 4 Script -->
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        // Inisialisasi CKEditor pada textarea dengan id 'content'
+        CKEDITOR.replace('content');
+    </script>
+</div>
+{% endblock %}

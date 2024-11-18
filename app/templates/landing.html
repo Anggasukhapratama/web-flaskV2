@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Tumanina</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="navbar">
+            <a href="#home" class="brand">
+                <img src="{{ url_for('static', filename='images/logo-tumanina.png') }}" alt="Logo Tumanina" class="logo">
+                Tumanina
+            </a>
+            <div class="menu">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="{{ url_for('auth.login') }}" class="admin-btn">Masuk sebagai Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header id="home">
+        <div class="header-content">
+            <h1 class="fade-in">Aplikasi Panduan Ibadah yang Nyaman</h1>
+            <p class="slide-up">Pelajari gerakan sholat dan ibadah dengan akurat.</p>
+            <div class="app-buttons fade-in">
+                <a href="#" class="download-btn">
+                    <img src="{{ url_for('static', filename='images/playstore-icon.png') }}" alt="Play Store Icon" class="icon"> Download di Play Store
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2 class="fade-in">Tentang Aplikasi</h2>
+        <p class="slide-up">Aplikasi Tumanina membantu Anda memahami dan melakukan ibadah dengan lebih baik.</p>
+        <div class="features">
+            <div class="feature slide-up">
+                <img src="{{ url_for('static', filename='images/feature1.png') }}" alt="Fitur 1">
+                <h3>Deteksi Gerakan</h3>
+                <p>Analisis gerakan sholat Anda dengan AI.</p>
+            </div>
+            <div class="feature slide-up">
+                <img src="{{ url_for('static', filename='images/feature2.png') }}" alt="Fitur 2">
+                <h3>Panduan Lengkap</h3>
+                <p>Panduan sholat mulai dari niat hingga salam.</p>
+            </div>
+            <div class="feature slide-up">
+                <img src="{{ url_for('static', filename='images/feature3.png') }}" alt="Fitur 3">
+                <h3>Penilaian Akurat</h3>
+                <p>Feedback langsung dari setiap gerakan Anda.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="fade-in">Fitur</h2>
+        <div class="feature-list">
+            <div class="feature-item fade-in">Deteksi Gerakan Sholat</div>
+            <div class="feature-item fade-in">Panduan Niat dan Bacaan</div>
+            <div class="feature-item fade-in">Penilaian Kesalahan</div>
+            <div class="feature-item fade-in">Pengingat Waktu Sholat</div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section class="screenshots">
+        <h2 class="fade-in">Screenshots</h2>
+        <div class="screenshot-list">
+            <img src="{{ url_for('static', filename='images/screenshot1.png') }}" alt="Screenshot 1" class="hover-zoom">
+            <img src="{{ url_for('static', filename='images/screenshot2.png') }}" alt="Screenshot 2" class="hover-zoom">
+            <img src="{{ url_for('static', filename='images/screenshot3.png') }}" alt="Screenshot 3" class="hover-zoom">
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="fade-in">Contact Us</h2>
+        <p class="slide-up">Email: contact@tumanina.com</p>
+        <p class="slide-up">Phone: +62 812 3456 7890</p>
+        <p class="slide-up">Address: Jl, Aing Lapar pengin Dahar Gacoan</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2023 Tumanina. All rights reserved.</p>
+        <p>Follow us on 
+            <a href="#">Facebook</a> | 
+            <a href="#">Instagram</a> | 
+            <a href="#">Twitter</a>
+        </p>
+    </footer>
+</body>
+</html>

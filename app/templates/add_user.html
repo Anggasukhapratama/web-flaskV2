@@ -1,0 +1,23 @@
+<!-- templates/add_user.html -->
+{% extends "base.html" %}
+
+{% block title %}Tambah User{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_user.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h1>Tambah User</h1>
+    <form action="{{ url_for('auth.add_user') }}" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        
+        <button type="submit">Tambah</button>
+    </form>
+</div>
+{% endblock %}
