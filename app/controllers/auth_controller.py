@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash
 from app.models.user_model import UserModel
 from app import mysql 
 from werkzeug.utils import secure_filename
+from bs4 import BeautifulSoup
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/admin')
 
@@ -125,41 +126,60 @@ def delete_user(user_id):
 
 @auth_bp.route('/artikel')
 def artikel():
+    search = request.args.get('search', '')
+    sort = request.args.get('sort', '')
+
+    query = "SELECT * FROM articles"
+    filters = []
+
+    if search:
+        filters.append(f"title LIKE '%{search}%'")
+
+    if filters:
+        query += " WHERE " + " AND ".join(filters)
+
+    if sort == 'judul':
+        query += " ORDER BY title"
+
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM articles")
+    cursor.execute(query)
     articles = cursor.fetchall()
     cursor.close()
+
     return render_template('artikel.html', articles=articles)
 
 # Route untuk menambah artikel
+
+
 @auth_bp.route('/artikel/add', methods=['GET', 'POST'])
 def add_artikel():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        
+
+        # Bersihkan tag <p> menggunakan BeautifulSoup
+        soup = BeautifulSoup(content, "html.parser")
+        cleaned_content = soup.get_text()  # Hanya mengambil teks tanpa tag HTML
+
         image_filename = None
-        # Proses upload gambar jika ada
         if 'image' in request.files:
             image = request.files['image']
             if image and allowed_file(image.filename):
                 image_filename = secure_filename(image.filename)
                 image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], image_filename))
-                print("Image saved:", image_filename)  # Debugging
 
-        # Simpan artikel ke database
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO articles (title, content, image) VALUES (%s, %s, %s)", (title, content, image_filename))
+        cursor.execute(
+            "INSERT INTO articles (title, content, image) VALUES (%s, %s, %s)",
+            (title, cleaned_content, image_filename)
+        )
         mysql.connection.commit()
         cursor.close()
-        
+
         flash('Artikel berhasil ditambahkan!', 'success')
         return redirect(url_for('auth.artikel'))
-    
     return render_template('add_artikel.html')
 
-
-# Edit Artikel
 # Edit Artikel
 @auth_bp.route('/artikel/edit/<int:artikel_id>', methods=['GET', 'POST'])
 def edit_artikel(artikel_id):
@@ -168,33 +188,38 @@ def edit_artikel(artikel_id):
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        
+
+        # Bersihkan tag <p> menggunakan BeautifulSoup
+        soup = BeautifulSoup(content, "html.parser")
+        cleaned_content = soup.get_text()
+
         image_filename = None
-        # Proses upload gambar jika ada
         if 'image' in request.files and request.files['image'].filename != '':
             image = request.files['image']
             if image and allowed_file(image.filename):
                 image_filename = secure_filename(image.filename)
                 image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], image_filename))
 
-        # Ambil gambar yang lama jika tidak ada gambar baru
         if not image_filename:
             cursor.execute("SELECT image FROM articles WHERE id=%s", (artikel_id,))
             image_filename = cursor.fetchone()[0]
-        
-        # Update database
-        cursor.execute("UPDATE articles SET title=%s, content=%s, image=%s WHERE id=%s", (title, content, image_filename, artikel_id))
+
+        cursor.execute(
+            "UPDATE articles SET title=%s, content=%s, image=%s WHERE id=%s",
+            (title, cleaned_content, image_filename, artikel_id)
+        )
         mysql.connection.commit()
         cursor.close()
-        
+
         flash('Artikel berhasil diperbarui!', 'success')
         return redirect(url_for('auth.artikel'))
-    
+
     cursor.execute("SELECT * FROM articles WHERE id=%s", (artikel_id,))
     artikel = cursor.fetchone()
     cursor.close()
-    
+
     return render_template('edit_artikel.html', artikel=artikel)
+
 
 # Daftar Artikel
 # Hapus Artikel

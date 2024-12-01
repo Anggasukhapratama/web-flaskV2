@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block title %}Add Artikel{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_article.css') }}">
+{% endblock %}
+
 {% block content %}
     <h2>Add Article</h2>
     <form method="POST" enctype="multipart/form-data">
@@ -19,9 +25,11 @@
     </form>
 
     <!-- CKEditor Script -->
-    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script src="//cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
-        // Initialize CKEditor on the content field
-        CKEDITOR.replace('content');
+        CKEDITOR.replace('content', {
+            removePlugins: 'notification,notificationaggregator'
+        });
     </script>
+    
 {% endblock %}

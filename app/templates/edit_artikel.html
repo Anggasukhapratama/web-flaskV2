@@ -2,8 +2,11 @@
 
 {% block title %}Edit Artikel{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_article.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="content">
     <h2>Edit Artikel</h2>
     <form action="{{ url_for('auth.edit_artikel', artikel_id=artikel[0]) }}" method="POST" enctype="multipart/form-data">
         <label for="title">Judul:</label>
@@ -27,10 +30,12 @@
     </form>
 
     <!-- CKEditor 4 Script -->
-    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script src="//cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
-        // Inisialisasi CKEditor pada textarea dengan id 'content'
-        CKEDITOR.replace('content');
-    </script>
+        CKEDITOR.replace('content', {
+            removePlugins: 'notification,notificationaggregator'
+        });
+    </script>    
+    
 </div>
 {% endblock %}
