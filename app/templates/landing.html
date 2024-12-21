@@ -17,8 +17,9 @@
             <div class="menu">
                 <a href="#home">Home</a>
                 <a href="#about">About</a>
+                <a href="#features">Features</a>
+                <a href="#review">Add Review</a>
                 <a href="#contact">Contact</a>
-                <a href="{{ url_for('auth.login') }}" class="admin-btn">Masuk sebagai Admin</a>
             </div>
         </div>
     </nav>
@@ -40,27 +41,10 @@
     <section class="about" id="about">
         <h2 class="fade-in">Tentang Aplikasi</h2>
         <p class="slide-up">Aplikasi Tumanina membantu Anda memahami dan melakukan ibadah dengan lebih baik.</p>
-        <div class="features">
-            <div class="feature slide-up">
-                <img src="{{ url_for('static', filename='images/feature1.png') }}" alt="Fitur 1">
-                <h3>Deteksi Gerakan</h3>
-                <p>Analisis gerakan sholat Anda dengan AI.</p>
-            </div>
-            <div class="feature slide-up">
-                <img src="{{ url_for('static', filename='images/feature2.png') }}" alt="Fitur 2">
-                <h3>Panduan Lengkap</h3>
-                <p>Panduan sholat mulai dari niat hingga salam.</p>
-            </div>
-            <div class="feature slide-up">
-                <img src="{{ url_for('static', filename='images/feature3.png') }}" alt="Fitur 3">
-                <h3>Penilaian Akurat</h3>
-                <p>Feedback langsung dari setiap gerakan Anda.</p>
-            </div>
-        </div>
     </section>
 
     <!-- Features Section -->
-    <section class="features">
+    <section class="features" id="features">
         <h2 class="fade-in">Fitur</h2>
         <div class="feature-list">
             <div class="feature-item fade-in">Deteksi Gerakan Sholat</div>
@@ -70,13 +54,22 @@
         </div>
     </section>
 
-    <!-- Screenshots Section -->
-    <section class="screenshots">
-        <h2 class="fade-in">Screenshots</h2>
-        <div class="screenshot-list">
-            <img src="{{ url_for('static', filename='images/screenshot1.png') }}" alt="Screenshot 1" class="hover-zoom">
-            <img src="{{ url_for('static', filename='images/screenshot2.png') }}" alt="Screenshot 2" class="hover-zoom">
-            <img src="{{ url_for('static', filename='images/screenshot3.png') }}" alt="Screenshot 3" class="hover-zoom">
+    <!-- Add Application Review Section -->
+    <section id="review">
+        <h2 class="fade-in">Masukan Review anda terhadap aplikasi kami</h2>
+        <p class="slide-up">Bagikan pengalaman Anda menggunakan aplikasi kami.</p>
+        <div>
+            <form id="review-form">
+                <div>
+                    <label for="reviewerName">Your Name:</label>
+                    <input type="text" id="reviewerName" placeholder="Enter your name" required>
+                </div>
+                <div>
+                    <label for="reviewText">Write Your Review:</label>
+                    <textarea id="reviewText" rows="4" placeholder="Share your experience..." required></textarea>
+                </div>
+                <button type="submit" id="submitButton">Submit Review</button>
+            </form>
         </div>
     </section>
 
@@ -88,14 +81,40 @@
         <p class="slide-up">Address: Jl, Aing Lapar pengin Dahar Gacoan</p>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2023 Tumanina. All rights reserved.</p>
-        <p>Follow us on 
-            <a href="#">Facebook</a> | 
-            <a href="#">Instagram</a> | 
-            <a href="#">Twitter</a>
-        </p>
-    </footer>
+   <!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2023 Tumanina. All rights reserved.</p>
+    <>Follow us on 
+        <a href="#">Facebook</a> | 
+        <a href="#">Instagram</a> | 
+        <a href="#">Twitter</a> |
+</footer>
+
+
+    <!-- JavaScript untuk Submit Review -->
+    <script>
+        document.getElementById('review-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const reviewerName = document.getElementById('reviewerName').value;
+            const reviewText = document.getElementById('reviewText').value;
+
+            fetch('/sentimen/add_review', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: reviewerName, text: reviewText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
+                alert('Thank you for your review!');
+                document.getElementById('reviewerName').value = '';
+                document.getElementById('reviewText').value = '';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
