@@ -188,10 +188,11 @@ def delete_user(user_id):
         flash("Pengguna tidak ditemukan.", "error")
         return redirect(url_for('auth.users'))
 
-    # Cegah admin biasa menghapus pengguna lain
-    if session['role'] != 'super_admin' and target_user[1] == 'admin':
-        flash("Anda tidak diizinkan untuk menghapus pengguna ini.", "error")
-        return redirect(url_for('auth.users'))
+    # Validasi hak akses
+    if session['role'] != 'super_admin':
+        if target_user[1] == 'super_admin' or (session['role'] == 'admin' and target_user[1] == 'admin'):
+            flash("Anda tidak diizinkan untuk menghapus pengguna ini.", "error")
+            return redirect(url_for('auth.users'))
 
     # Proses hapus user
     cursor.execute("DELETE FROM users WHERE id=%s", (user_id,))
@@ -200,7 +201,6 @@ def delete_user(user_id):
 
     flash('User berhasil dihapus!', 'success')
     return redirect(url_for('auth.users'))
-
 
 # Tambah Artikel
 
@@ -348,3 +348,28 @@ def logout():
     session.pop('user_id', None)
     flash("Anda telah logout.", "info")
     return redirect(url_for('auth.login'))
+
+@auth_bp.route('/api/login', methods=['POST'])
+def api_login():
+    # Ambil data JSON dari body request
+    data = request.get_json()
+    
+    if not data or not all(k in data for k in ('username', 'password')):
+        return jsonify({"error": "Username dan password harus diisi"}), 400
+
+    username = data['username']
+    password = data['password']
+    
+    # Cek user di database
+    user = UserModel.get_user_by_username(username)
+
+    if user and check_password_hash(user[2], password): 
+        
+        user_data = {
+            "id": user[0],
+            "username": user[1],
+            "role": user[3]
+        }
+        return jsonify({"message": "Login berhasil", "user": user_data}), 200
+    else:
+        return jsonify({"error": "Username atau password salah"}), 401
