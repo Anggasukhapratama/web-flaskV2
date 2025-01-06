@@ -1814,3 +1814,38 @@ section,
   background-color: #45a049;
   transform: translateY(-2px);
 }
+
+/* Kontainer untuk Video */
+.video-container {
+  width: 100%; /* Video memenuhi lebar kontainer */
+  aspect-ratio: 16 / 9; /* Menjaga rasio 16:9 untuk video */
+  border-radius: 16px; /* Membuat sudut melengkung (cekung) */
+  overflow: hidden; /* Menghindari konten keluar dari area sudut */
+  background-color: #000; /* Warna latar belakang untuk kesan video */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Menambahkan bayangan lembut */
+}
+
+/* Atur iframe di dalam kontainer */
+.video-container iframe {
+  width: 100%; /* Memastikan video memenuhi lebar kontainer */
+  height: 100%; /* Memastikan video memenuhi tinggi kontainer */
+  border: none; /* Menghapus border default iframe */
+}
+
+/* Pastikan elemen sejajar */
+.row.align-items-xl-center {
+  display: flex; /* Flexbox untuk sejajar elemen */
+  align-items: center; /* Sejajar secara vertikal */
+  justify-content: space-between; /* Memberikan ruang antara elemen */
+}
+
+/* Responsivitas untuk layar kecil */
+@media (max-width: 768px) {
+  .row.align-items-xl-center {
+    flex-direction: column; /* Susunan vertikal untuk layar kecil */
+  }
+
+  .video-container {
+    margin-top: 20px; /* Memberikan jarak pada layar kecil */
+  }
+}
